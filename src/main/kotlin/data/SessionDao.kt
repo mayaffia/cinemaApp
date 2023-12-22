@@ -11,7 +11,8 @@ import presentation.model.OutputModel
 
 
 interface SessionDao {
-    fun addSession(session: Session)
+    fun getSchedule() : MutableList<Session>
+    fun addSession(session: Session) : Result
     fun deleteSession(movie : Movie, time: kotlinx.datetime.LocalDateTime) : Result
     fun changeSessionTime(movie : Movie, time: kotlinx.datetime.LocalDateTime,
                           newTime: kotlinx.datetime.LocalDateTime) : Result
@@ -21,17 +22,25 @@ interface SessionDao {
     fun addNewSession(movie : Movie, time: kotlinx.datetime.LocalDateTime) : Result
 }
 
-class RuntimeSessionDao(private val schedule : MutableList<Session>, private val movies : MutableList<Movie>) : SessionDao {
+class RuntimeSessionDao(private val movies : MutableList<Movie>) : SessionDao {
 
     private val runCinema = RuntimeCinemaDao()
     private var counter = 0
 
-    override fun addSession(session: Session) {
-        if (movies.find { it == session.movie } == null) {
-            println("В прокате нет такого фильма")
-            return
+    private val schedule : MutableList<Session> = mutableListOf()
+    override fun getSchedule() : MutableList<Session> {
+        return schedule
+    }
+
+    override fun addSession(session: Session) : Result{
+        val movie = movies.find { it == session.movie }
+        return when {
+            movie == null -> Error(OutputModel("В прокате нет такого фильма"))
+            else -> {
+                schedule.add(session)
+                Success
+            }
         }
-        schedule.add(session)
     }
 
 

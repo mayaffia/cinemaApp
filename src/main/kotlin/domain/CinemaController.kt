@@ -6,75 +6,43 @@ import domain.entity.Ticket
 import kotlinx.datetime.LocalDateTime
 import presentation.RuntimePresenter
 import readTime
+import domain.Error
+import domain.Success
+import domain.Result
+import presentation.model.OutputModel
 
 interface CinemaController {
-    fun sellTicket(movie : Movie, time : LocalDateTime)
-    //fun returnTicket()
+    fun sellTicket(movie : Movie, time : LocalDateTime, row : Int, num : Int) : Result
+    fun returnTicket(time : LocalDateTime, row : Int, num : Int) : Result
 }
 
 class CinemaControllerImpl(private val schedule : MutableList<Session>, private val movies : MutableList<Movie>) : CinemaController {
-    //private val runCinema = RuntimeCinemaDao()
-    //private val schedule = runCinema.getSchedule()
-    //private val movies = runCinema.getMovies()
     private val presenter = RuntimePresenter(schedule, movies)
-    private val runSession = RuntimeSessionDao(schedule, movies)
+    private val runSession = RuntimeSessionDao(movies)
 
-    override fun sellTicket(movie : Movie, time : LocalDateTime) {
-        //println("На какой фильм поситетель хочет приобрести билет?")
-        //val movie = readMovie(movies) ?: return
+    override fun sellTicket(movie : Movie, time : LocalDateTime, row : Int, num : Int) : Result {
 
-        //val time = readTime(schedule)
-        val session = schedule.find { it.movie == movie && it.time == time }
-        if (session == null) {
-            println("")
-            return
-        }
-
-
-        println("Желаемое место?(ряд и номер места через пробел)")
-        var seat = readln().split(" ")
-        var row = seat[0].toInt()
-        var num = seat[1].toInt()
-
+        val session = schedule.find { it.movie == movie && it.time == time } ?: return Error(OutputModel("Нет такого сеанса"))
 
         if (runSession.isSeatFree(session, row, num)) {
             val ticket = Ticket(session.id, row, num)
             runSession.addTicket(session, ticket)
-           // println("билет успешно продан")
-            return
+            return Success
+        } else {
+            return Error(OutputModel("Это место занято"))
         }
 
-        while (!runSession.isSeatFree(session, row, num)) {
-            println("Это место занято. Можете посмотреть на зал и предложить ему другое место из свободных")
-            presenter.showCinemaHall(session)
-            println("Желаемое место?(ряд и номер места через пробел)")
-            seat = readln().split(" ")
-            row = seat[0].toInt()
-            num = seat[1].toInt()
-
-            if (runSession.isSeatFree(session, row, num)) {
-                val ticket = Ticket(session.id, row, num)
-                runSession.addTicket(session, ticket)
-                println("билет успешно продан")
-                return
-            }
-        }
     }
 
-    /*override fun returnTicket() {
-        val time = readTime(schedule)
-        val session = schedule.find { it.time == time }
-        if (session == null) {
-            println("Нет такого сеанса")
-            return
-        }
-        println("Введите ряд места:")
-        val row = readln().toInt()
-        println("Введите номер места:")
-        val num = readln().toInt()
+    override fun returnTicket(time : LocalDateTime, row : Int, num : Int) : Result {
+
+        val session = schedule.find { it.time == time } ?: return Error(OutputModel("Нет такого сеанса"))
+
+        val t = session.allTickets.find{ it.seatRow == row && it.seatNum == num}
+            ?: return Error(OutputModel("Нет такого проданного билета"))
 
         session.allTickets.remove(Ticket(session.id, row, num))
-        println("Возврат билета успешно произведен")
-    }*/
+        return Success
+    }
 
 }

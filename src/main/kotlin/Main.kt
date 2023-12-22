@@ -17,13 +17,12 @@ import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
 
-    val runCinema = RuntimeCinemaDao()
-    val schedule = runCinema.getSchedule()
-    val movies = runCinema.getMovies()
+    val runMovie = RuntimeMovieDao()
+    val movies = runMovie.getMovies()
+    val runSession = RuntimeSessionDao(movies)
+    val schedule = runSession.getSchedule()
 
-    val sessionController = CinemaControllerImpl(schedule, movies)
-    val runSession = RuntimeSessionDao(schedule, movies)
-    val runMovie = RuntimeMovieDao(movies)
+    val cinemaController = CinemaControllerImpl(schedule, movies)
 
     val presenter = RuntimePresenter(schedule, movies)
 
@@ -51,10 +50,10 @@ fun main(args: Array<String>) {
         }
         when (oper) {
             "1" -> {
-                //sessionController.sellTicket()
+                sellTicket(cinemaController, movies, schedule, validator)
             }
             "2" -> {
-                //sessionController.returnTicket()
+                returnTicket(cinemaController, validator, schedule)
             }
             "3" -> {
                 presenter.showCinemaHallOnSession()
@@ -109,6 +108,49 @@ fun printMenu() {
 }
 
 
+fun sellTicket(cinemaController : CinemaControllerImpl, movies: MutableList<Movie>,
+               schedule: MutableList<Session>, validator: CinemaValidatorImpl) {
+    println("На какой фильм поситетель хочет приобрести билет?")
+    val movie = readMovie(movies) ?: return
+    val time = readTime(schedule, validator)
+
+    println("Желаемое место?(ряд и номер места через пробел)")
+    val seat = readln().split(" ")
+    val row = seat[0].toIntOrNull()
+    val num = seat[1].toIntOrNull()
+
+    if (time != null && row != null && num != null) {
+        val res = cinemaController.sellTicket(movie, time, row, num)
+        if (res == Success) {
+            println("билет успешно продан")
+        } else {
+            println(res)    ////////CHECK
+        }
+    } else {
+        println("incorrect time or seats not int")
+    }
+}
+
+fun returnTicket(cinemaController : CinemaControllerImpl, validator: CinemaValidatorImpl, schedule: MutableList<Session>) {
+    val time = readTime(schedule, validator)
+    println("Введите ряд места:")
+    val row = readln().toIntOrNull()
+    println("Введите номер места:")
+    val num = readln().toIntOrNull()
+
+    if (time != null && row != null && num != null) {
+        val res = cinemaController.returnTicket(time, row, num)
+        if (res == Success) {
+            println("Возврат билета успешно произведен")
+        } else {
+            println(res)    ////////CHECK
+        }
+    } else {
+        println("incorrect time or seats not int")
+    }
+
+
+}
 fun readMovie(movies: MutableList<Movie>): Movie? {
     val title = readln()
 

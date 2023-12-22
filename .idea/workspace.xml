@@ -4,14 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5326d3d4-0df5-4173-afda-94a19f8e6d40" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/CinemaValidator.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/presentation/model/OutpurModel.kt" afterDir="false" />
+    <list default="true" id="5326d3d4-0df5-4173-afda-94a19f8e6d40" name="Changes" comment="в">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/CinemaDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/data/CinemaDao.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/MovieDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/data/MovieDao.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/SessionDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/data/SessionDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/SessionController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/CinemaController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/CinemaController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/CinemaController.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/presentation/Presenter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/presentation/Presenter.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -73,11 +72,24 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1703164562645</updated>
-      <workItem from="1703164563763" duration="23705000" />
+      <workItem from="1703164563763" duration="26827000" />
     </task>
+    <task id="LOCAL-00001" summary="в">
+      <option name="closed" value="true" />
+      <created>1703242058925</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1703242058925</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="в" />
+    <option name="LAST_COMMIT_MESSAGE" value="в" />
   </component>
 </project>

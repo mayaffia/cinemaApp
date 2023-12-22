@@ -4,6 +4,7 @@ import domain.entity.Movie
 import domain.entity.Session
 
 interface MovieDao {
+    fun getMovies() : MutableList<Movie>
     fun addMovie(movie : Movie)
     fun deleteMovie(movie : Movie)
     fun getAllMovies(): List<Movie>
@@ -12,8 +13,13 @@ interface MovieDao {
     fun changeMovieDuration(id : Int, newDuration : Int)
 }
 
-class RuntimeMovieDao(private val movies : MutableList<Movie>) : MovieDao {
+class RuntimeMovieDao() : MovieDao {
     private var counter = 0
+
+    private val movies : MutableList<Movie> = mutableListOf()
+    override fun getMovies() : MutableList<Movie>{
+        return movies
+    }
 
     override fun addMovie(movie: Movie) {
         movie.id = ++counter

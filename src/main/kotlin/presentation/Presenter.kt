@@ -16,20 +16,16 @@ interface Presenter {
 }
 
 class RuntimePresenter(private val schedule : MutableList<Session>, private val movies : MutableList<Movie>) : Presenter {
-    //private val runCinema = RuntimeCinemaDao()
-    //private val schedule = runCinema.getSchedule()
-    //private val movies = runCinema.getMovies()
-
     override fun showSchedule() {
         val sortedSchedule = schedule.sortedWith(compareBy { it.time })
-        for (session in schedule) {
+        for (session in sortedSchedule) {
             println(session)
         }
     }
 
     override fun showScheduleOnDate(day : Int , month: Int) {
         val sortedSchedule = schedule.sortedWith(compareBy { it.time })
-        for (session in schedule) {
+        for (session in sortedSchedule) {
             if (session.time.dayOfMonth == day && session.time.month == Month.of(month)) {
                 println(session)
             }
@@ -50,14 +46,9 @@ class RuntimePresenter(private val schedule : MutableList<Session>, private val 
 
     override fun showCinemaHallOnSession() {
         val validator = CinemaValidatorImpl()
-
-        println("Какой фильм интересует?")
-        val movie = readMovie(movies) ?: return
-
         val time = readTime(schedule, validator)
-        //LocalDateTime.of(2023, Month.DECEMBER, 16, 18, 30)
 
-        val session = schedule.find { it.movie == movie && it.time == time }
+        val session = schedule.find {it.time == time }
         if (session == null) {
             println("")
             return
