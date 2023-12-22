@@ -1,29 +1,29 @@
 package data
 
+import domain.Error
+import domain.Success
+import domain.Result
 import domain.entity.Cinema
 import domain.entity.Movie
 import domain.entity.Session
 import domain.entity.Ticket
-import readMovie
-import readTime
-import java.time.LocalDateTime
+import presentation.model.OutputModel
+
 
 interface SessionDao {
     fun addSession(session: Session)
-    fun deleteSession()
-    fun changeSessionTime()
+    fun deleteSession(movie : Movie, time: kotlinx.datetime.LocalDateTime) : Result
+    fun changeSessionTime(movie : Movie, time: kotlinx.datetime.LocalDateTime,
+                          newTime: kotlinx.datetime.LocalDateTime) : Result
     fun changeSessionMovie()
     fun addTicket(session: Session, ticket: Ticket)
     fun isSeatFree(session: Session, desiredRow: Int, desiredNum: Int) : Boolean
-    fun editSchedule()
-    fun addNewSession()
+    fun addNewSession(movie : Movie, time: kotlinx.datetime.LocalDateTime) : Result
 }
 
 class RuntimeSessionDao(private val schedule : MutableList<Session>, private val movies : MutableList<Movie>) : SessionDao {
 
     private val runCinema = RuntimeCinemaDao()
-    //private val schedule = runCinema.getSchedule()
-   // private val movies = runCinema.getMovies()
     private var counter = 0
 
     override fun addSession(session: Session) {
@@ -35,60 +35,45 @@ class RuntimeSessionDao(private val schedule : MutableList<Session>, private val
     }
 
 
-    override fun addNewSession() {
-        println("Введите название фильма:")
-        val movie = readMovie(movies) ?: return
-        println("Введите время сеанса:")
-        val time = readTime(schedule)
-        var session = schedule.find { it.time == time }
-        if (session != null) {
-            println("На это время уже стоит другой сеанс")
-            return
+    override fun addNewSession(movie : Movie, time: kotlinx.datetime.LocalDateTime) : Result {
+        val session = schedule.find { it.time == time }
+
+        return when {
+            session != null -> Error(OutputModel("На это время уже стоит другой сеанс"))
+            else -> {
+                addSession(Session(time , movie))
+                Success
+            }
         }
-
-        session = Session(time, movie)
-        addSession(session)
-
-        println("Новый сеанс был успешно добавлен")
-
     }
 
 
-    override fun deleteSession() {
-        println("Введите название фильма:")
-        val movie = readMovie(movies) ?: return
-        println("Введите время сеанса:")
-        val time = readTime(schedule)
+    override fun deleteSession(movie : Movie, time: kotlinx.datetime.LocalDateTime) : Result {
         val session = schedule.find { it.time == time }
-        if (session == null) {
-            println("Такого сеанса нет")
-            return
+
+        return when {
+            session == null -> Error(OutputModel("Такого сеанса нет"))
+            else -> {
+                schedule.remove(session)
+                Success
+            }
         }
-        schedule.remove(session)
-        println("Сеанс был успешно удален")
     }
 
-    override fun changeSessionTime() {
-        println("Введите название фильма:")
-        val movie = readMovie(movies) ?: return
-        println("Введите старое время сеанса:")
-        val time = readTime(schedule)
-        val session = schedule.find { it.time == time }
-        if (session == null) {
-            println("Такого сеанс нет")
-        }
-        schedule.remove(session)
-        println("Введите время сеанса, на которое хотите поменять:")
+    override fun changeSessionTime(movie : Movie, time: kotlinx.datetime.LocalDateTime, newTime: kotlinx.datetime.LocalDateTime) : Result{
 
-        val newTime = readTime(schedule)
+        val session = schedule.find { it.time == time } ?: return Error(OutputModel("Такого сеанс нет"))
+
+        schedule.remove(session)
         val sessionChanged = schedule.find { it.time == newTime }
-        if (sessionChanged != null) {
-            println("На это время уже стоит другой сеанс")
-            return
-        }
 
-        addSession(Session(newTime, movie))
-        println("Время сеанса было успешно изменено")
+        return when {
+            sessionChanged != null -> Error(OutputModel("На это время уже стоит другой сеанс"))
+            else -> {
+                addSession(Session(newTime, movie))
+                Success
+            }
+        }
     }
 
     override fun changeSessionMovie() {
@@ -108,29 +93,5 @@ class RuntimeSessionDao(private val schedule : MutableList<Session>, private val
         }
         return true
     }
-
-    override fun editSchedule() {
-        println("Нажмите:")
-        println("1 - чтобы добавить сеанс")
-        println("2 - чтобы поменять время сеанса")
-        println("3 - чтобы удалить сеанс")
-
-        val oper = readln()
-
-        when (oper) {
-            "1" -> {
-                addNewSession()
-            }
-
-            "2" -> {
-                changeSessionTime()
-            }
-
-            "3" -> {
-                deleteSession()
-            }
-        }
-    }
-
 
 }

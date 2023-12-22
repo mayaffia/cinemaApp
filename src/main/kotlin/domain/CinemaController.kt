@@ -1,46 +1,46 @@
 package domain
-import data.RuntimeCinemaDao
 import data.RuntimeSessionDao
 import domain.entity.Movie
 import domain.entity.Session
 import domain.entity.Ticket
-import presentation.Presenter
+import kotlinx.datetime.LocalDateTime
 import presentation.RuntimePresenter
-import readMovie
 import readTime
 
-interface SessionController {
-    fun sellTicket()
-    fun returnTicket()
+interface CinemaController {
+    fun sellTicket(movie : Movie, time : LocalDateTime)
+    //fun returnTicket()
 }
 
-class SessionControllerImpl(private val schedule : MutableList<Session>, private val movies : MutableList<Movie>) : SessionController {
+class CinemaControllerImpl(private val schedule : MutableList<Session>, private val movies : MutableList<Movie>) : CinemaController {
     //private val runCinema = RuntimeCinemaDao()
     //private val schedule = runCinema.getSchedule()
     //private val movies = runCinema.getMovies()
     private val presenter = RuntimePresenter(schedule, movies)
     private val runSession = RuntimeSessionDao(schedule, movies)
 
-    override fun sellTicket() {
-        println("На какой фильм поситетель хочет приобрести билет?")
-        val movie = readMovie(movies) ?: return
+    override fun sellTicket(movie : Movie, time : LocalDateTime) {
+        //println("На какой фильм поситетель хочет приобрести билет?")
+        //val movie = readMovie(movies) ?: return
 
-        val time = readTime(schedule)
+        //val time = readTime(schedule)
         val session = schedule.find { it.movie == movie && it.time == time }
         if (session == null) {
             println("")
             return
         }
 
+
         println("Желаемое место?(ряд и номер места через пробел)")
         var seat = readln().split(" ")
         var row = seat[0].toInt()
         var num = seat[1].toInt()
 
+
         if (runSession.isSeatFree(session, row, num)) {
             val ticket = Ticket(session.id, row, num)
             runSession.addTicket(session, ticket)
-            println("билет успешно продан")
+           // println("билет успешно продан")
             return
         }
 
@@ -61,7 +61,7 @@ class SessionControllerImpl(private val schedule : MutableList<Session>, private
         }
     }
 
-    override fun returnTicket() {
+    /*override fun returnTicket() {
         val time = readTime(schedule)
         val session = schedule.find { it.time == time }
         if (session == null) {
@@ -75,6 +75,6 @@ class SessionControllerImpl(private val schedule : MutableList<Session>, private
 
         session.allTickets.remove(Ticket(session.id, row, num))
         println("Возврат билета успешно произведен")
-    }
+    }*/
 
 }

@@ -1,5 +1,6 @@
 package presentation
 import data.RuntimeCinemaDao
+import domain.CinemaValidatorImpl
 import domain.entity.Movie
 import domain.entity.Session
 import kotlinx.datetime.Month
@@ -48,10 +49,12 @@ class RuntimePresenter(private val schedule : MutableList<Session>, private val 
     }
 
     override fun showCinemaHallOnSession() {
+        val validator = CinemaValidatorImpl()
+
         println("Какой фильм интересует?")
         val movie = readMovie(movies) ?: return
 
-        val time = readTime(schedule)
+        val time = readTime(schedule, validator)
         //LocalDateTime.of(2023, Month.DECEMBER, 16, 18, 30)
 
         val session = schedule.find { it.movie == movie && it.time == time }

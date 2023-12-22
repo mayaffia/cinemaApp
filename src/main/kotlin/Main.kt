@@ -1,8 +1,10 @@
 import data.RuntimeCinemaDao
 import data.RuntimeMovieDao
 import data.RuntimeSessionDao
-import domain.SessionController
-import domain.SessionControllerImpl
+import domain.CinemaController
+import domain.CinemaControllerImpl
+import domain.CinemaValidatorImpl
+import domain.Success
 import domain.entity.Movie
 import domain.entity.Session
 import kotlinx.datetime.LocalDate
@@ -19,11 +21,13 @@ fun main(args: Array<String>) {
     val schedule = runCinema.getSchedule()
     val movies = runCinema.getMovies()
 
-    val sessionController = SessionControllerImpl(schedule, movies)
+    val sessionController = CinemaControllerImpl(schedule, movies)
     val runSession = RuntimeSessionDao(schedule, movies)
     val runMovie = RuntimeMovieDao(movies)
 
     val presenter = RuntimePresenter(schedule, movies)
+
+    val validator = CinemaValidatorImpl()
 
     //val movies = cinema.getMovieList()
 
@@ -47,19 +51,19 @@ fun main(args: Array<String>) {
         }
         when (oper) {
             "1" -> {
-                sessionController.sellTicket()
+                //sessionController.sellTicket()
             }
             "2" -> {
-                sessionController.returnTicket()
+                //sessionController.returnTicket()
             }
             "3" -> {
                 presenter.showCinemaHallOnSession()
             }
             "4" -> {
-                runMovie.editMovieData()
+                editMovieData(runMovie, movies)
             }
             "5" -> {
-                runSession.editSchedule()
+                editSchedule(runSession, validator, schedule, movies)
             }
             "6" -> {
                 println("Введите название фильма:")
@@ -107,6 +111,9 @@ fun printMenu() {
 
 fun readMovie(movies: MutableList<Movie>): Movie? {
     val title = readln()
+
+   // validator.validateMovieTitle(title, movies)
+
     val movie = movies.find { it.title == title }
     if (movie == null) {
         println("В прокате нет такого фильма")
@@ -114,40 +121,136 @@ fun readMovie(movies: MutableList<Movie>): Movie? {
     return movie
 }
 
-fun readTime(schedule: MutableList<Session>): kotlinx.datetime.LocalDateTime {
-
+fun readTime(schedule: MutableList<Session>, validator : CinemaValidatorImpl): kotlinx.datetime.LocalDateTime? {
     println("Дата сеанса?(введите в формате dd.MM)")
-    var date = readln()
-    val patternDate = Regex("^([0-2]\\d|3[0-1])\\.(0\\d|1[0-2])$")
+    val date = readln()
 
-    while(!patternDate.matches(date)) {
-        println("Введены некорректные данные. Повторите ввод")
-        date = readln()
+    var day = 0
+    var month = 0
+    var hour = 0
+    var minute = 0
+
+    if (validator.validateDate(date) == Success) {
+        val dateSplit = date.split(".")
+        day = dateSplit[0].toInt()
+        month = dateSplit[1].toInt()
     }
-    val dateSplit = date.split(".")
-    val day = dateSplit[0].toInt()
-    val month = dateSplit[1].toInt()
-
 
     println("Время сеанса?(введите в формате HH:mm)")
-    var timeSession = readln()
-    val patternTime = Regex("^([01]\\d|2[0-3]):([0-5]\\d)$")
-    while (!patternTime.matches(timeSession)) {
-        println("Введены некорректные данные. Повторите ввод")
-        timeSession = readln()
+    val timeSession = readln()
+
+    if (validator.validateTime(timeSession) == Success) {
+        val timeSplit = timeSession.split(":")
+        hour = timeSplit[0].toInt()
+        minute = timeSplit[1].toInt()
     }
-    val timeSplit = timeSession.split(":")
-    val hour = timeSplit[0].toInt()
-    val minute = timeSplit[1].toInt()
-    //readTime()
-    //LocalDateTime.of(2023, Month.DECEMBER, 16, 18, 30)
-    try {
-        LocalDateTime.of(2023, Month.of(month), day, hour, minute)
-        //return LocalDateTime.of(2023, Month.of(month), day, hour, minute)
-    } catch (e: DateTimeException) {
-        println("Введена некорректная дата")
+
+    if (validator.validateDate(date) == Success && validator.validateTime(timeSession) == Success) {
+        return kotlinx.datetime.LocalDateTime(2023, month, day, hour, minute)
     }
-    //return LocalDateTime.of(2023, Month.of(month), day, hour, minute)
-    return kotlinx.datetime.LocalDateTime(2023, month, day, hour, minute)
-    //return LocalDateTime.of(2023, 12, day, hour, minute)
+    return null
+}
+
+fun editSchedule(runSession: RuntimeSessionDao, validator: CinemaValidatorImpl, schedule: MutableList<Session>, movies: MutableList<Movie>) {
+    println("Нажмите:")
+    println("1 - чтобы добавить сеанс")
+    println("2 - чтобы поменять время сеанса")
+    println("3 - чтобы удалить сеанс")
+
+    val oper = readln()
+
+    when (oper) {
+        "1" -> {
+            println("Введите название фильма:")
+            val movie = readMovie(movies) ?: return
+            println("Введите время сеанса:")
+            val time = readTime(schedule, validator)
+            if (time != null) {
+                val res = runSession.addNewSession(movie, time)
+                if (res == Success) {
+                    println("Новый сеанс был успешно добавлен")
+                } else {
+                    println(res)    ////////CHECK
+                }
+            } else {
+                println("incorrect time")
+            }
+        }
+
+        "2" -> {
+            println("Введите название фильма:")
+            val movie = readMovie(movies) ?: return
+            println("Введите старое время сеанса:")
+            val time = readTime(schedule, validator)
+            println("Введите время сеанса, на которое хотите поменять:")
+            val newTime = readTime(schedule, validator)
+            if (time != null && newTime != null) {
+                val res = runSession.changeSessionTime(movie, time, newTime)
+                if (res == Success) {
+                    println("Время сеанса было успешно изменено")
+                } else {
+                    println(res)    ////////CHECK
+                }
+            } else {
+                println("incorrect time")
+            }
+
+        }
+
+        "3" -> {
+            println("Введите название фильма:")
+            val movie = readMovie(movies) ?: return
+            println("Введите время сеанса:")
+            val time = readTime(schedule, validator)
+            if (time != null) {
+                val res = runSession.deleteSession(movie, time)
+                if (res == Success) {
+                    println("Сеанс был успешно удален")
+                } else {
+                    println(res)    ////////CHECK
+                }
+            } else {
+                println("incorrect time")
+            }
+
+        }
+    }
+}
+
+
+fun editMovieData(runMovie : RuntimeMovieDao, movies : MutableList<Movie>) {
+    println("Введите название фильма, данные которого хотите поменять:")
+    val title = readln()
+    val movie = movies.find { it.title == title }
+    if (movie == null) {
+        println("")
+        return
+    }
+    println("Нажмите:")
+    println("1 - чтобы поменять название фильма")
+    println("2 - чтобы поменять режиссера фильма")
+    println("3 - чтобы поменять длительность фильма")
+
+
+    val oper = readln()
+
+    when (oper) {
+        "1" -> {
+            println("Введите новое название:")
+            val newName = readln()
+            runMovie.changeMovieTitle(movie.id, newName)
+        }
+
+        "2" -> {
+            println("Введите нового режиссера:")
+            val newDirector = readln()
+            runMovie.changeMovieDirector(movie.id, newDirector)
+        }
+
+        "3" -> {
+            println("Введите новую длительность:")
+            val newDuration = readln().toInt()
+            runMovie.changeMovieDuration(movie.id, newDuration)
+        }
+    }
 }
