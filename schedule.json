@@ -1,15 +1,41 @@
 [
     {
+        "time": "2023-12-17T12:30",
+        "movie": {
+            "title": "film1",
+            "director": "dir1",
+            "duration": 10,
+            "id": 1
+        },
+        "allTickets": [
+        ],
+        "countOfFreeSeats": 24,
+        "id": 1
+    },
+    {
         "time": "2023-12-18T18:12",
         "movie": {
-            "title": "film2",
-            "director": "dffg",
-            "duration": 232,
-            "id": 2
+            "title": "film1",
+            "director": "dir1",
+            "duration": 10,
+            "id": 1
         },
         "allTickets": [
         ],
         "countOfFreeSeats": 24,
         "id": 2
+    },
+    {
+        "time": "2023-12-19T14:00",
+        "movie": {
+            "title": "film2",
+            "director": "dir2",
+            "duration": 100,
+            "id": 2
+        },
+        "allTickets": [
+        ],
+        "countOfFreeSeats": 24,
+        "id": 3
     }
 ]

@@ -1,8 +1,14 @@
 [
     {
-        "title": "film2",
-        "director": "fkfk",
-        "duration": 1,
+        "title": "film1",
+        "director": "dir1",
+        "duration": 10,
         "id": 1
+    },
+    {
+        "title": "film2",
+        "director": "dir2",
+        "duration": 100,
+        "id": 2
     }
 ]
