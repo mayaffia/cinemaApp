@@ -1,5 +1,5 @@
 package domain
-import data.MovieDaoImpl
+
 import data.SessionDaoImpl
 import domain.entity.Movie
 import domain.entity.Ticket
@@ -8,43 +8,40 @@ import presentation.model.OutputModel
 import repository.SessionJsonRepository
 
 interface CinemaController {
-    fun sellTicket(movie : Movie, time : LocalDateTime, row : Int, num : Int) : Result
-    fun returnTicket(time : LocalDateTime, row : Int, num : Int) : Result
+    fun sellTicket(movie: Movie, time: LocalDateTime, row: Int, num: Int): OutputModel
+    fun returnTicket(time: LocalDateTime, row: Int, num: Int): OutputModel
 }
 
-
-//корректировать количсетво свободных мест
-class CinemaControllerImpl(private val sessionDaoImpl: SessionDaoImpl,
-                           private val movieDaoImpl : MovieDaoImpl,
-    private val sessionController: SessionController) : CinemaController {
+class CinemaControllerImpl(
+    private val sessionDaoImpl: SessionDaoImpl,
+    private val sessionController: SessionController
+) : CinemaController {
 
     private val jsonS = SessionJsonRepository()
 
-    override fun sellTicket(movie : Movie, time : LocalDateTime, row : Int, num : Int) : Result {
+    override fun sellTicket(movie: Movie, time: LocalDateTime, row: Int, num: Int): OutputModel {
         val sessions = sessionDaoImpl.getAllSessions()
 
         val session = sessions.find { it.movie == movie && it.time == time }
-            ?: return Error(OutputModel("Нет такого сеанса"))
+            ?: return OutputModel("Нет такого сеанса")
 
         return if (sessionController.isSeatFree(session, row, num)) {
             val ticket = Ticket(session.id, row, num)
             sessionController.addTicket(session, ticket)
             jsonS.saveToFile(sessions, "schedule.json")
-            Success
+            OutputModel("билет успешно продан")
         } else {
-            Error(OutputModel("Это место занято"))
+            OutputModel("Это место занято")
         }
-
 
     }
 
-    override fun returnTicket(time : LocalDateTime, row : Int, num : Int) : Result {
+    override fun returnTicket(time: LocalDateTime, row: Int, num: Int): OutputModel {
         val sessions = sessionDaoImpl.getAllSessions()
+        val session = sessions.find { it.time == time } ?: return OutputModel("Нет такого сеанса")
 
-        val session = sessions.find { it.time == time } ?: return Error(OutputModel("Нет такого сеанса"))
-
-        session.allTickets.find{ it.seatRow == row && it.seatNum == num}
-            ?: return Error(OutputModel("Нет такого проданного билета"))
+        session.allTickets.find { it.seatRow == row && it.seatNum == num }
+            ?: return OutputModel("Нет такого проданного билета")
 
         val temp = session.allTickets.toMutableList()
         temp.remove(Ticket(session.id, row, num))
@@ -52,8 +49,7 @@ class CinemaControllerImpl(private val sessionDaoImpl: SessionDaoImpl,
 
         jsonS.saveToFile(sessions, "schedule.json")
 
-       // session.allTickets.remove(Ticket(session.id, row, num))
-        return Success
+        return OutputModel("Возврат билета успешно произведен")
     }
 
 }

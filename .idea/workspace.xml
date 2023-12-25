@@ -5,25 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5326d3d4-0df5-4173-afda-94a19f8e6d40" name="Changes" comment="в">
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/di/DI.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/MovieController.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/SessionController.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Session1.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/repository/JsonRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/repository/MovieJsonRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/repository/SessionJsonRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/test.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/detekt.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/CinemaDao.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/MovieDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/data/MovieDao.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/SessionDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/data/SessionDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/TicketDao.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/di/DI.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/di/DI.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/CinemaController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/CinemaController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/CinemaValidator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/CinemaValidator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/MovieController.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/SessionController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/SessionController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Cinema.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Movie.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Movie.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Session.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Session.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Ticket.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Ticket.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Session1.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/presentation/Presenter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/presentation/Presenter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/presentation/model/OutpurModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/presentation/model/OutputModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/repository/JsonRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/repository/JsonRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/test.kt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,6 +72,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "master",
     "last_opened_file_path": "C:/Users/mayaa/IdeaProjects/kpoHW",
@@ -81,6 +80,9 @@
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
@@ -101,7 +103,7 @@
       <updated>1703164562645</updated>
       <workItem from="1703164563763" duration="31816000" />
       <workItem from="1703254787847" duration="79000" />
-      <workItem from="1703254895759" duration="38844000" />
+      <workItem from="1703254895759" duration="50185000" />
     </task>
     <task id="LOCAL-00001" summary="в">
       <option name="closed" value="true" />
@@ -119,7 +121,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703247743254</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="в">
+      <option name="closed" value="true" />
+      <created>1703514781465</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1703514781465</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

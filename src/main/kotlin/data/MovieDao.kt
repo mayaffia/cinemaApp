@@ -1,29 +1,28 @@
 package data
 
 import domain.entity.Movie
+import presentation.model.OutputModel
 import repository.MovieJsonRepository
 
 interface MovieDao {
-    fun addMovie(movie : Movie)
-    fun deleteMovie(movie : Movie)
+    fun addMovie(movie: Movie)
+    fun deleteMovie(movie: Movie)
     fun getAllMovies(): List<Movie>
-    fun changeMovieTitle(id : Int, newTitle : String)
-    fun changeMovieDirector(id : Int, newDirector : String)
-    fun changeMovieDuration(id : Int, newDuration : Int)
+    fun changeMovieTitle(id: Int, newTitle: String): OutputModel
+    fun changeMovieDirector(id: Int, newDirector: String): OutputModel
+    fun changeMovieDuration(id: Int, newDuration: Int): OutputModel
 }
 
-class MovieDaoImpl(private val path : String) : MovieDao {
+class MovieDaoImpl(private val path: String) : MovieDao {
 
     private val jsonM = MovieJsonRepository()
-    private val movies: List<Movie>
-        get() = jsonM.loadFromFile(path)
-
 
     companion object {
-        private var counter : Int = 0;
+        private var counter: Int = 0;
     }
 
     override fun addMovie(movie: Movie) {
+        val movies = jsonM.loadFromFile(path)
         val temp = movies.toMutableList()
         temp.add(movie)
         movie.id = ++counter
@@ -32,40 +31,52 @@ class MovieDaoImpl(private val path : String) : MovieDao {
     }
 
     override fun deleteMovie(movie: Movie) {
-        TODO("Not yet implemented")   //тоже в файл сохр
+        val movies = jsonM.loadFromFile(path)
+        val temp = movies.toMutableList()
+        temp.remove(movie)
+
+        jsonM.saveToFile(temp, "movies.json")
     }
 
     override fun getAllMovies(): List<Movie> {
-        return movies
+        return jsonM.loadFromFile(path)
     }
 
-    override fun changeMovieTitle(id: Int, newTitle: String) {
+    override fun changeMovieTitle(id: Int, newTitle: String): OutputModel {
+        val movies = jsonM.loadFromFile(path)
         val movie = movies.find { it.id == id }
-        if (movie != null) {
+
+        return if (movie != null) {
             movie.title = newTitle
+            jsonM.saveToFile(movies, "movies.json")
+            OutputModel("Название успешно поменяно")
         } else {
-            //
+            OutputModel("В прокате нет такого фильма")
         }
     }
 
-    override fun changeMovieDirector(id: Int, newDirector: String) {
+    override fun changeMovieDirector(id: Int, newDirector: String): OutputModel {
+        val movies = jsonM.loadFromFile(path)
         val movie = movies.find { it.id == id }
-        if (movie != null) {
+        return if (movie != null) {
             movie.director = newDirector
+            jsonM.saveToFile(movies, "movies.json")
+            OutputModel("Режиссер успешно поменян")
         } else {
-            //
+            OutputModel("В прокате нет такого фильма")
         }
     }
 
-    override fun changeMovieDuration(id: Int, newDuration: Int) {
+    override fun changeMovieDuration(id: Int, newDuration: Int): OutputModel {
+        val movies = jsonM.loadFromFile(path)
         val movie = movies.find { it.id == id }
-        if (movie != null) {
+        return if (movie != null) {
             movie.duration = newDuration
+            jsonM.saveToFile(movies, "movies.json")
+            OutputModel("Длительность успешно поменяна")
         } else {
-            //
+            OutputModel("В прокате нет такого фильма")
         }
     }
-
-
 
 }
