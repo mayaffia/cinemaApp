@@ -2,6 +2,7 @@ import data.MovieDao
 import data.MovieDaoImpl
 import di.DI.cinemaController
 import di.DI.cinemaValidator
+import di.DI.movieController
 import di.DI.movieDaoImpl
 import di.DI.presenter
 import di.DI.sessionController
@@ -14,76 +15,83 @@ import kotlinx.datetime.LocalDate
 import kotlin.system.exitProcess
 
 fun main() {
-    val movieDao = movieDaoImpl
-    val sessionController = sessionController
-    val cinemaController = cinemaController
-    val presenter = presenter
-    val validator = cinemaValidator
+    try {
+        val movieDao = movieDaoImpl
+        val sessionController = sessionController
+        val cinemaController = cinemaController
+        val movieController = movieController
+        val presenter = presenter
+        val validator = cinemaValidator
 
-    var oper: String
-    while (true) {
-        printMenu()
-        oper = readln()
-        if (oper == "11") {
-            exitProcess(0)
-        }
-        when (oper) {
-            "1" -> {
-                sellTicket(cinemaController, validator, movieDao)
+        var oper: String
+        while (true) {
+            printMenu()
+            oper = readln()
+            if (oper == "11") {
+                exitProcess(0)
             }
+            when (oper) {
+                "1" -> {
+                    sellTicket(cinemaController, validator, movieDao)
+                }
 
-            "2" -> {
-                returnTicket(cinemaController, validator)
-            }
+                "2" -> {
+                    returnTicket(cinemaController, validator)
+                }
 
-            "3" -> {
-                presenter.showCinemaHallOnSession()
-            }
+                "3" -> {
+                    presenter.showCinemaHallOnSession()
+                }
 
-            "4" -> {
-                editMovieData(movieDao)
-            }
+                "4" -> {
+                    editMovieData(movieDao)
+                }
 
-            "5" -> {
-                editSchedule(validator, sessionController, movieDao)
-            }
+                "5" -> {
+                    editSchedule(validator, sessionController, movieDao)
+                }
 
-            "6" -> {
-                addMovie(movieDao)
-            }
+                "6" -> {
+                    addMovie(movieDao)
+                }
 
-            "7" -> {
-                presenter.showSchedule()
-            }
+                "7" -> {
+                    presenter.showSchedule()
+                }
 
-            "8" -> {
-                println("На какую дату показать расписание? (введите в формате dd.MM)")
-                val date = readln()
+                "8" -> {
+                    println("На какую дату показать расписание? (введите в формате dd.MM)")
+                    val date = readln()
 
-                if (validator.validateDate(date) == Success) {
-                    val dateSplit = date.split(".")
-                    val day = dateSplit[0].toInt()
-                    val month = dateSplit[1].toInt()
-                    try {
-                        LocalDate(2023, month, day)
-                        presenter.showScheduleOnDate(day, month)
-                    } catch(_: IllegalArgumentException) {
+                    if (validator.validateDate(date) == Success) {
+                        val dateSplit = date.split(".")
+                        val day = dateSplit[0].toInt()
+                        val month = dateSplit[1].toInt()
+                        try {
+                            LocalDate(2023, month, day)
+                            presenter.showScheduleOnDate(day, month)
+                        } catch (_: IllegalArgumentException) {
+                            println("Некорректая дата")
+                        }
+                    } else {
                         println("Некорректая дата")
                     }
-                } else {
-                    println("Некорректая дата")
+                }
+
+                "9" -> {
+                    presenter.showMovies()
+                }
+
+                "10" -> {
+                    println("Введите название фильма:")
+                    val movie = readMovie(movieDao.getAllMovies()) ?: return
+                    movieController.deleteMovie(movie)
+                    println("Фильм был успешно удален")
                 }
             }
-            "9" -> {
-                presenter.showMovies()
-            }
-            "10" -> {
-                println("Введите название фильма:")
-                val movie = readMovie(movieDao.getAllMovies()) ?: return
-                movieDao.deleteMovie(movie)
-                println("Фильм был успешно удален")
-            }
         }
+    } catch (_: Exception) {
+        println("Ошибка")
     }
 }
 
@@ -222,16 +230,13 @@ fun editSchedule(
             println("Введите название фильма:")
             val movie = readMovie(movies) ?: return
             println("Введите время сеанса:")
-            val time = readTime(validator)
-            if (time != null) {
-                val res = sessionController.addNewSession(movie, time)
-                if (res == Success) {
-                    println("Новый сеанс был успешно добавлен")
-                } else {
-                    println(res)
-                }
+            val time = readTime(validator) ?: return
+
+            val res = sessionController.addNewSession(movie, time)
+            if (res == Success) {
+                println("Новый сеанс был успешно добавлен")
             } else {
-                println("incorrect time")
+                println(res)
             }
         }
 

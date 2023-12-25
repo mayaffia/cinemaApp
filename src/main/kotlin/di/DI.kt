@@ -2,9 +2,7 @@ package di
 
 import data.MovieDaoImpl
 import data.SessionDaoImpl
-import domain.CinemaControllerImpl
-import domain.CinemaValidatorImpl
-import domain.SessionControllerImpl
+import domain.*
 import presentation.PresenterImpl
 
 object DI {
@@ -25,6 +23,9 @@ object DI {
         get() = CinemaControllerImpl(
             sessionDaoImpl, sessionController
         )
+
+    val movieController : MovieControllerImpl
+        get() = MovieControllerImpl(sessionDaoImpl, movieDaoImpl, sessionController)
 
     val presenter: PresenterImpl
         get() = PresenterImpl(sessionDaoImpl, movieDaoImpl)

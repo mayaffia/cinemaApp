@@ -6,7 +6,7 @@ import repository.MovieJsonRepository
 
 interface MovieDao {
     fun addMovie(movie: Movie)
-    fun deleteMovie(movie: Movie)
+    fun delete(movie: Movie)
     fun getAllMovies(): List<Movie>
     fun changeMovieTitle(id: Int, newTitle: String): OutputModel
     fun changeMovieDirector(id: Int, newDirector: String): OutputModel
@@ -30,7 +30,7 @@ class MovieDaoImpl(private val path: String) : MovieDao {
         jsonM.saveToFile(temp, "movies.json")
     }
 
-    override fun deleteMovie(movie: Movie) {
+    override fun delete(movie: Movie) {
         val movies = jsonM.loadFromFile(path)
         val temp = movies.toMutableList()
         temp.remove(movie)
