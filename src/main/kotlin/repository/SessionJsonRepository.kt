@@ -6,11 +6,11 @@ import kotlinx.serialization.json.Json
 
 class SessionJsonRepository : JsonRepository<Session>() {
     private val json = Json { prettyPrint = true }
-    override fun serialize(data: List<Session>) : String {
+    override fun serialize(data: List<Session>): String {
         return json.encodeToString(data)
     }
 
-    override fun deserialize(data: String) : List<Session>{
+    override fun deserialize(data: String): List<Session> {
         return json.decodeFromString(data)
     }
 }

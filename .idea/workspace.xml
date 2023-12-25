@@ -5,23 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5326d3d4-0df5-4173-afda-94a19f8e6d40" name="Changes" comment="в">
-      <change afterPath="$PROJECT_DIR$/.idea/detekt.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/MovieDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/data/MovieDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/SessionDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/data/SessionDao.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/movies.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/schedule.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/di/DI.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/di/DI.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/CinemaController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/CinemaController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/CinemaValidator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/CinemaValidator.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/MovieController.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/SessionController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/SessionController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Cinema.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Movie.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Movie.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/MovieController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/MovieController.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Session.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Session.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Session1.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/presentation/Presenter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/presentation/Presenter.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/presentation/model/OutpurModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/presentation/model/OutputModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/repository/JsonRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/repository/JsonRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/test.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/repository/MovieJsonRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/repository/MovieJsonRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/repository/SessionJsonRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/repository/SessionJsonRepository.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,8 +42,8 @@
         <option value="Kotlin Interface" />
         <option value="Kotlin Data Class" />
         <option value="Kotlin Object" />
-        <option value="Kotlin Class" />
         <option value="Kotlin File" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -103,7 +94,7 @@
       <updated>1703164562645</updated>
       <workItem from="1703164563763" duration="31816000" />
       <workItem from="1703254787847" duration="79000" />
-      <workItem from="1703254895759" duration="50185000" />
+      <workItem from="1703254895759" duration="55499000" />
     </task>
     <task id="LOCAL-00001" summary="в">
       <option name="closed" value="true" />
@@ -129,7 +120,23 @@
       <option name="project" value="LOCAL" />
       <updated>1703514781465</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="в">
+      <option name="closed" value="true" />
+      <created>1703527845885</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1703527845885</updated>
+    </task>
+    <task id="LOCAL-00005" summary="в">
+      <option name="closed" value="true" />
+      <created>1703531268942</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1703531268942</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

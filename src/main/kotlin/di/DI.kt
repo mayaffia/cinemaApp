@@ -24,7 +24,7 @@ object DI {
             sessionDaoImpl, sessionController
         )
 
-    val movieController : MovieControllerImpl
+    val movieController: MovieControllerImpl
         get() = MovieControllerImpl(sessionDaoImpl, movieDaoImpl, sessionController)
 
     val presenter: PresenterImpl

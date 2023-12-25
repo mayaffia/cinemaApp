@@ -8,11 +8,12 @@ interface MovieController {
     fun deleteMovie(movie: Movie)
 }
 
-class MovieControllerImpl(private val sessionDaoImpl: SessionDaoImpl,
-                          private val movieDaoImpl: MovieDaoImpl,
-                          private val sessionController: SessionController
+class MovieControllerImpl(
+    private val sessionDaoImpl: SessionDaoImpl,
+    private val movieDaoImpl: MovieDaoImpl,
+    private val sessionController: SessionController
 ) : MovieController {
-    override fun deleteMovie(movie : Movie) {
+    override fun deleteMovie(movie: Movie) {
         val sessions = sessionDaoImpl.getAllSessions()
 
         movieDaoImpl.delete(movie)

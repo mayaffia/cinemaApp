@@ -5,7 +5,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 
-class MovieJsonRepository : JsonRepository<Movie>(){
+class MovieJsonRepository : JsonRepository<Movie>() {
     private val json = Json { prettyPrint = true }
     override fun serialize(data: List<Movie>): String {
         return json.encodeToString(data)
