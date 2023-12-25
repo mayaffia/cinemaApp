@@ -1,69 +1,82 @@
 package data
 
-import domain.Error
-import domain.Success
-import domain.Result
-import domain.entity.Cinema
-import domain.entity.Movie
 import domain.entity.Session
-import domain.entity.Ticket
-import presentation.model.OutputModel
+import repository.SessionJsonRepository
 
 
 interface SessionDao {
-    fun getSchedule() : MutableList<Session>
-    fun addSession(session: Session) : Result
-    fun deleteSession(movie : Movie, time: kotlinx.datetime.LocalDateTime) : Result
-    fun changeSessionTime(movie : Movie, time: kotlinx.datetime.LocalDateTime,
-                          newTime: kotlinx.datetime.LocalDateTime) : Result
-    fun changeSessionMovie()
-    fun addTicket(session: Session, ticket: Ticket)
-    fun isSeatFree(session: Session, desiredRow: Int, desiredNum: Int) : Boolean
-    fun addNewSession(movie : Movie, time: kotlinx.datetime.LocalDateTime) : Result
+    fun getAllSessions() : List<Session>
+
+    fun getSession(id : Int) : Session?
+
+    fun addSession(session: Session)
+
+    //fun deleteSession()
+
 }
 
-class RuntimeSessionDao(private val movies : MutableList<Movie>) : SessionDao {
+class SessionDaoImpl(private val path : String) : SessionDao {
 
-    private val runCinema = RuntimeCinemaDao()
-    private var counter = 0
+    private val jsonS = SessionJsonRepository()
 
-    private val schedule : MutableList<Session> = mutableListOf()
-    override fun getSchedule() : MutableList<Session> {
-        return schedule
+    private val sessions: List<Session>
+        get() = jsonS.loadFromFile(path)
+
+    //private var sessions = jsonS.loadFromFile(path)
+
+
+    companion object {
+        private var counter : Int = 0;
+    }
+  //  private var counter = 0
+
+    override fun getAllSessions() : List<Session> {
+        return sessions
     }
 
-    override fun addSession(session: Session) : Result{
-        val movie = movies.find { it == session.movie }
-        return when {
-            movie == null -> Error(OutputModel("В прокате нет такого фильма"))
-            else -> {
-                schedule.add(session)
-                Success
-            }
-        }
+    override fun getSession(id: Int) : Session? {
+        return sessions.find { it.id == id }
     }
 
+    override fun addSession(session: Session) {
+        val temp = sessions.toMutableList()
+        temp.add(session)
+        session.id = ++counter
 
-    override fun addNewSession(movie : Movie, time: kotlinx.datetime.LocalDateTime) : Result {
-        val session = schedule.find { it.time == time }
+        jsonS.saveToFile(temp, "schedule.json")
+    }
+
+    /*override fun addNewSession(movie : Movie, time: kotlinx.datetime.LocalDateTime) : Result {
+        val session = sessions.find { it.time == time }
+        val m = movies.find { it == movie } ?: return Error(OutputModel("В прокате нет такого фильма"))
 
         return when {
             session != null -> Error(OutputModel("На это время уже стоит другой сеанс"))
             else -> {
-                addSession(Session(time , movie))
+                val newSession = Session(time, movie)
+                newSession.id = ++counter
+
+                val temp = sessions.toMutableList()
+                temp.add(newSession)
+                sessions = temp
+               // schedule.add(newSession)
                 Success
             }
         }
     }
 
-
     override fun deleteSession(movie : Movie, time: kotlinx.datetime.LocalDateTime) : Result {
-        val session = schedule.find { it.time == time }
+        val session = sessions.find { it.time == time }
 
         return when {
             session == null -> Error(OutputModel("Такого сеанса нет"))
             else -> {
-                schedule.remove(session)
+
+                val temp = sessions.toMutableList()
+                temp.remove(session)
+                sessions = temp
+
+                //sessions.remove(session)
                 Success
             }
         }
@@ -71,23 +84,25 @@ class RuntimeSessionDao(private val movies : MutableList<Movie>) : SessionDao {
 
     override fun changeSessionTime(movie : Movie, time: kotlinx.datetime.LocalDateTime, newTime: kotlinx.datetime.LocalDateTime) : Result{
 
-        val session = schedule.find { it.time == time } ?: return Error(OutputModel("Такого сеанс нет"))
+        val session = sessions.find { it.time == time } ?: return Error(OutputModel("Такого сеанс нет"))
 
-        schedule.remove(session)
-        val sessionChanged = schedule.find { it.time == newTime }
+
+        val temp = sessions.toMutableList()
+        temp.remove(session)
+        sessions = temp
+
+        //sessions.remove(session)
+        val sessionChanged = sessions.find { it.time == newTime }
 
         return when {
             sessionChanged != null -> Error(OutputModel("На это время уже стоит другой сеанс"))
             else -> {
-                addSession(Session(newTime, movie))
+                addNewSession(movie, newTime)
                 Success
             }
         }
     }
 
-    override fun changeSessionMovie() {
-        TODO("Not yet implemented")
-    }
 
     override fun addTicket(session: Session, ticket: Ticket) {
         session.allTickets.add(ticket)
@@ -101,6 +116,6 @@ class RuntimeSessionDao(private val movies : MutableList<Movie>) : SessionDao {
             }
         }
         return true
-    }
+    }*/
 
 }

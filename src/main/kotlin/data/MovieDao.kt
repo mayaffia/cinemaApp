@@ -1,10 +1,9 @@
 package data
 
 import domain.entity.Movie
-import domain.entity.Session
+import repository.MovieJsonRepository
 
 interface MovieDao {
-    fun getMovies() : MutableList<Movie>
     fun addMovie(movie : Movie)
     fun deleteMovie(movie : Movie)
     fun getAllMovies(): List<Movie>
@@ -13,21 +12,27 @@ interface MovieDao {
     fun changeMovieDuration(id : Int, newDuration : Int)
 }
 
-class RuntimeMovieDao() : MovieDao {
-    private var counter = 0
+class MovieDaoImpl(private val path : String) : MovieDao {
 
-    private val movies : MutableList<Movie> = mutableListOf()
-    override fun getMovies() : MutableList<Movie>{
-        return movies
+    private val jsonM = MovieJsonRepository()
+    private val movies: List<Movie>
+        get() = jsonM.loadFromFile(path)
+
+
+    companion object {
+        private var counter : Int = 0;
     }
 
     override fun addMovie(movie: Movie) {
+        val temp = movies.toMutableList()
+        temp.add(movie)
         movie.id = ++counter
-        movies.add(movie)
+
+        jsonM.saveToFile(temp, "movies.json")
     }
 
     override fun deleteMovie(movie: Movie) {
-        TODO("Not yet implemented")
+        TODO("Not yet implemented")   //тоже в файл сохр
     }
 
     override fun getAllMovies(): List<Movie> {

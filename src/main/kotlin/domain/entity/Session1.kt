@@ -4,10 +4,10 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Session(
+class Session1 (
     val time: LocalDateTime,
     val movie: Movie,
-    var allTickets: List<Ticket>,  // make list
-    var countOfFreeSeats : Int,
-    var id: Int = 0
+    val allTickets: List<Ticket>,
+    val id: Int,
+    val countOfFreeSeats: Int
 )

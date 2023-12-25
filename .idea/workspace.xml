@@ -5,12 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5326d3d4-0df5-4173-afda-94a19f8e6d40" name="Changes" comment="в">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/di/DI.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/MovieController.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/SessionController.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Session1.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/repository/JsonRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/repository/MovieJsonRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/repository/SessionJsonRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/test.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/CinemaDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/data/CinemaDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/CinemaDao.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/MovieDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/data/MovieDao.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/SessionDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/data/SessionDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/data/TicketDao.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/CinemaController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/CinemaController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Session.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Session.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Ticket.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/domain/entity/Ticket.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/presentation/Presenter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/presentation/Presenter.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -23,21 +35,35 @@
       <ProjectState />
     </projectState>
   </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Kotlin Interface" />
         <option value="Kotlin Data Class" />
+        <option value="Kotlin Object" />
         <option value="Kotlin Class" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2ZqzmuElwEHE5X6FnZbSBo0v13S" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -50,6 +76,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/mayaa/IdeaProjects/kpoHW",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -72,7 +99,9 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1703164562645</updated>
-      <workItem from="1703164563763" duration="26827000" />
+      <workItem from="1703164563763" duration="31816000" />
+      <workItem from="1703254787847" duration="79000" />
+      <workItem from="1703254895759" duration="38844000" />
     </task>
     <task id="LOCAL-00001" summary="в">
       <option name="closed" value="true" />
@@ -82,7 +111,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703242058925</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="в">
+      <option name="closed" value="true" />
+      <created>1703247743254</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1703247743254</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

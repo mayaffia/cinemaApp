@@ -1,45 +1,29 @@
-import data.RuntimeCinemaDao
-import data.RuntimeMovieDao
-import data.RuntimeSessionDao
-import domain.CinemaController
+import data.MovieDao
+import data.MovieDaoImpl
+import data.SessionDao
+import di.DI.cinemaController
+import di.DI.cinemaValidator
+import di.DI.movieDaoImpl
+import di.DI.presenter
+import di.DI.sessionController
+import di.DI.sessionDaoImpl
 import domain.CinemaControllerImpl
 import domain.CinemaValidatorImpl
+import domain.SessionControllerImpl
 import domain.Success
 import domain.entity.Movie
 import domain.entity.Session
-import kotlinx.datetime.LocalDate
-import presentation.Presenter
-import presentation.RuntimePresenter
-import java.time.DateTimeException
-import java.time.LocalDateTime
-import java.time.Month
 import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
 
-    val runMovie = RuntimeMovieDao()
-    val movies = runMovie.getMovies()
-    val runSession = RuntimeSessionDao(movies)
-    val schedule = runSession.getSchedule()
+    val sessionDao = sessionDaoImpl
+    val movieDao = movieDaoImpl
+    val sessionController = sessionController
+    val cinemaController = cinemaController
+    val presenter = presenter
+    val validator = cinemaValidator
 
-    val cinemaController = CinemaControllerImpl(schedule, movies)
-
-    val presenter = RuntimePresenter(schedule, movies)
-
-    val validator = CinemaValidatorImpl()
-
-    //val movies = cinema.getMovieList()
-
-    /*movies.add(Movie("title", "dir", 10))
-    sessionController.addNewSession(
-        LocalDateTime.of(2023, Month.DECEMBER, 16, 18, 30),
-        Movie("title", "dir", 10), schedule, movies
-    )
-    movies.add(Movie("title2", "dir", 10))
-    sessionController.addNewSession(
-        LocalDateTime.of(2023, Month.DECEMBER, 17, 18, 30),
-        Movie("title2", "dir", 10), schedule, movies
-    )*/
 
     var oper = ""
     while (true) {
@@ -50,19 +34,19 @@ fun main(args: Array<String>) {
         }
         when (oper) {
             "1" -> {
-                sellTicket(cinemaController, movies, schedule, validator)
+                sellTicket(cinemaController,validator, sessionDao, movieDao)
             }
             "2" -> {
-                returnTicket(cinemaController, validator, schedule)
+                returnTicket(cinemaController, validator, sessionDao)
             }
             "3" -> {
                 presenter.showCinemaHallOnSession()
             }
             "4" -> {
-                editMovieData(runMovie, movies)
+                editMovieData(movieDao)
             }
             "5" -> {
-                editSchedule(runSession, validator, schedule, movies)
+                editSchedule(validator,sessionController, movieDao, sessionDao)
             }
             "6" -> {
                 println("Введите название фильма:")
@@ -71,7 +55,7 @@ fun main(args: Array<String>) {
                 val director = readln()
                 println("Введите длительность:")
                 val duration = readln().toInt()
-                runMovie.addMovie(Movie(title, director, duration))
+                movieDao.addMovie(Movie(title, director, duration))
             }
             "7" -> {
                 presenter.showSchedule()
@@ -108,8 +92,12 @@ fun printMenu() {
 }
 
 
-fun sellTicket(cinemaController : CinemaControllerImpl, movies: MutableList<Movie>,
-               schedule: MutableList<Session>, validator: CinemaValidatorImpl) {
+fun sellTicket(cinemaController : CinemaControllerImpl, validator: CinemaValidatorImpl,
+               sessionDao: SessionDao, movieDao: MovieDao
+) {
+    val movies = movieDao.getAllMovies()
+    val schedule = sessionDao.getAllSessions()
+
     println("На какой фильм поситетель хочет приобрести билет?")
     val movie = readMovie(movies) ?: return
     val time = readTime(schedule, validator)
@@ -124,14 +112,16 @@ fun sellTicket(cinemaController : CinemaControllerImpl, movies: MutableList<Movi
         if (res == Success) {
             println("билет успешно продан")
         } else {
-            println(res)    ////////CHECK
+            println(res)
         }
     } else {
         println("incorrect time or seats not int")
     }
 }
 
-fun returnTicket(cinemaController : CinemaControllerImpl, validator: CinemaValidatorImpl, schedule: MutableList<Session>) {
+fun returnTicket(cinemaController : CinemaControllerImpl, validator: CinemaValidatorImpl, sessionDao: SessionDao) {
+    val schedule = sessionDao.getAllSessions()
+
     val time = readTime(schedule, validator)
     println("Введите ряд места:")
     val row = readln().toIntOrNull()
@@ -143,7 +133,7 @@ fun returnTicket(cinemaController : CinemaControllerImpl, validator: CinemaValid
         if (res == Success) {
             println("Возврат билета успешно произведен")
         } else {
-            println(res)    ////////CHECK
+            println(res)
         }
     } else {
         println("incorrect time or seats not int")
@@ -151,10 +141,8 @@ fun returnTicket(cinemaController : CinemaControllerImpl, validator: CinemaValid
 
 
 }
-fun readMovie(movies: MutableList<Movie>): Movie? {
+fun readMovie(movies: List<Movie>): Movie? {
     val title = readln()
-
-   // validator.validateMovieTitle(title, movies)
 
     val movie = movies.find { it.title == title }
     if (movie == null) {
@@ -163,7 +151,7 @@ fun readMovie(movies: MutableList<Movie>): Movie? {
     return movie
 }
 
-fun readTime(schedule: MutableList<Session>, validator : CinemaValidatorImpl): kotlinx.datetime.LocalDateTime? {
+fun readTime(schedule: List<Session>, validator : CinemaValidatorImpl): kotlinx.datetime.LocalDateTime? {
     println("Дата сеанса?(введите в формате dd.MM)")
     val date = readln()
 
@@ -193,7 +181,11 @@ fun readTime(schedule: MutableList<Session>, validator : CinemaValidatorImpl): k
     return null
 }
 
-fun editSchedule(runSession: RuntimeSessionDao, validator: CinemaValidatorImpl, schedule: MutableList<Session>, movies: MutableList<Movie>) {
+fun editSchedule(validator: CinemaValidatorImpl, sessionController: SessionControllerImpl,
+                 movieDao: MovieDao, sessionDao: SessionDao) {
+    val movies = movieDao.getAllMovies()
+    val schedule = sessionDao.getAllSessions()
+
     println("Нажмите:")
     println("1 - чтобы добавить сеанс")
     println("2 - чтобы поменять время сеанса")
@@ -208,11 +200,11 @@ fun editSchedule(runSession: RuntimeSessionDao, validator: CinemaValidatorImpl, 
             println("Введите время сеанса:")
             val time = readTime(schedule, validator)
             if (time != null) {
-                val res = runSession.addNewSession(movie, time)
+                val res = sessionController.addNewSession(movie, time)
                 if (res == Success) {
                     println("Новый сеанс был успешно добавлен")
                 } else {
-                    println(res)    ////////CHECK
+                    println(res)
                 }
             } else {
                 println("incorrect time")
@@ -227,11 +219,11 @@ fun editSchedule(runSession: RuntimeSessionDao, validator: CinemaValidatorImpl, 
             println("Введите время сеанса, на которое хотите поменять:")
             val newTime = readTime(schedule, validator)
             if (time != null && newTime != null) {
-                val res = runSession.changeSessionTime(movie, time, newTime)
+                val res = sessionController.changeSessionTime(movie, time, newTime)
                 if (res == Success) {
                     println("Время сеанса было успешно изменено")
                 } else {
-                    println(res)    ////////CHECK
+                    println(res)
                 }
             } else {
                 println("incorrect time")
@@ -245,11 +237,11 @@ fun editSchedule(runSession: RuntimeSessionDao, validator: CinemaValidatorImpl, 
             println("Введите время сеанса:")
             val time = readTime(schedule, validator)
             if (time != null) {
-                val res = runSession.deleteSession(movie, time)
+                val res = sessionController.deleteSession(movie, time)
                 if (res == Success) {
                     println("Сеанс был успешно удален")
                 } else {
-                    println(res)    ////////CHECK
+                    println(res)
                 }
             } else {
                 println("incorrect time")
@@ -260,7 +252,9 @@ fun editSchedule(runSession: RuntimeSessionDao, validator: CinemaValidatorImpl, 
 }
 
 
-fun editMovieData(runMovie : RuntimeMovieDao, movies : MutableList<Movie>) {
+fun editMovieData(movieDao : MovieDaoImpl) {
+    val movies = movieDao.getAllMovies()
+
     println("Введите название фильма, данные которого хотите поменять:")
     val title = readln()
     val movie = movies.find { it.title == title }
@@ -280,19 +274,19 @@ fun editMovieData(runMovie : RuntimeMovieDao, movies : MutableList<Movie>) {
         "1" -> {
             println("Введите новое название:")
             val newName = readln()
-            runMovie.changeMovieTitle(movie.id, newName)
+            movieDao.changeMovieTitle(movie.id, newName)
         }
 
         "2" -> {
             println("Введите нового режиссера:")
             val newDirector = readln()
-            runMovie.changeMovieDirector(movie.id, newDirector)
+            movieDao.changeMovieDirector(movie.id, newDirector)
         }
 
         "3" -> {
             println("Введите новую длительность:")
             val newDuration = readln().toInt()
-            runMovie.changeMovieDuration(movie.id, newDuration)
+            movieDao.changeMovieDuration(movie.id, newDuration)
         }
     }
 }
